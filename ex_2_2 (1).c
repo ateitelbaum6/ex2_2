@@ -62,7 +62,7 @@ int main() {
             case addOne: {
                 int day, brand;
                 int suv, sedan, coupe, gt;
-                scanf("%d %d", &day, &brand);
+                scanf(" %d %d", &day, &brand);
                 if (day >= 1 && day <= DAYS_IN_YEAR && brand >= 0 && brand < NUM_OF_BRANDS) {
                     scanf("%d %d %d %d", &suv, &sedan, &coupe, &gt);
                     cube[day - 1][brand][0] = suv;
@@ -84,7 +84,7 @@ int main() {
                 if (day >= 1 && day <= DAYS_IN_YEAR) {
                     for (int b = 0; b < NUM_OF_BRANDS; b++) {
                         int suv, sedan, coupe, gt;
-                        scanf("%d %d %d %d", &suv, &sedan, &coupe, &gt);
+                        scanf(" %d %d %d %d", &suv, &sedan, &coupe, &gt);
                         cube[day - 1][b][0] = suv;
                         cube[day - 1][b][1] = sedan;
                         cube[day - 1][b][2] = coupe;
