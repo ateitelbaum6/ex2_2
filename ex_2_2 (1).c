@@ -40,7 +40,7 @@ int main() {
     int days[NUM_OF_BRANDS] = {0};
     int choice;
 
-    // Initialize all slots in the data cube to -1 to signify they are empty
+    // Part 2: Initialize all positions inside the cube to -1
     for (int d = 0; d < DAYS_IN_YEAR; d++) {
         for (int b = 0; b < NUM_OF_BRANDS; b++) {
             for (int t = 0; t < NUM_OF_TYPES; t++) {
@@ -56,43 +56,34 @@ int main() {
         switch(choice){
             case addOne: {
                 int day, brand;
-                int suv, sedan, coupe, gt;
-                
                 scanf("%d %d", &day, &brand);
                 
                 if (day >= 1 && day <= DAYS_IN_YEAR && brand >= 0 && brand < NUM_OF_BRANDS) {
-                    scanf("%d %d %d %d", &suv, &sedan, &coupe, &gt);
-                    
-                    cube[day - 1][brand][0] = suv;
-                    cube[day - 1][brand][1] = sedan;
-                    cube[day - 1][brand][2] = coupe;
-                    cube[day - 1][brand][3] = gt;
-                    
+                    scanf("%d %d %d %d", &cube[day - 1][brand][0], 
+                                         &cube[day - 1][brand][1], 
+                                         &cube[day - 1][brand][2], 
+                                         &cube[day - 1][brand][3]);
                     days[brand]++;
                 } else {
-                    printf("Invalid input\n");
+                    printf("Invalid Input\n");
                 }
                 break;
             }
             case addAll: {
                 int day;
-                int suv, sedan, coupe, gt;
-                
                 scanf("%d", &day);
                 
+                // Part 2 constraint: Strictly check day validity first
                 if (day >= 1 && day <= DAYS_IN_YEAR) {
                     for (int b = 0; b < NUM_OF_BRANDS; b++) {
-                        scanf("%d %d %d %d", &suv, &sedan, &coupe, &gt);
-                        
-                        cube[day - 1][b][0] = suv;
-                        cube[day - 1][b][1] = sedan;
-                        cube[day - 1][b][2] = coupe;
-                        cube[day - 1][b][3] = gt;
-                        
+                        scanf("%d %d %d %d", &cube[day - 1][b][0], 
+                                             &cube[day - 1][b][1], 
+                                             &cube[day - 1][b][2], 
+                                             &cube[day - 1][b][3]);
                         days[b]++;
                     }
                 } else {
-                    printf("Invalid input\n");
+                    printf("Invalid Input\n");
                 }
                 break;
             }
@@ -107,7 +98,7 @@ int main() {
                     int highest_type_sales = -1;
                     int best_type_idx = 0;
 
-                    // Calculate brand totals for the specified day
+                    // Calculate total and top-performing brands
                     for (int b = 0; b < NUM_OF_BRANDS; b++) {
                         int brand_sum = 0;
                         for (int t = 0; t < NUM_OF_TYPES; t++) {
@@ -122,7 +113,7 @@ int main() {
                         }
                     }
 
-                    // Calculate vehicle type totals for the specified day
+                    // Calculate top-performing types
                     for (int t = 0; t < NUM_OF_TYPES; t++) {
                         int type_sum = 0;
                         for (int b = 0; b < NUM_OF_BRANDS; b++) {
@@ -141,11 +132,12 @@ int main() {
                     printf("The best-selling brand is %s: %d\n", brands[best_brand_idx], highest_brand_sales);
                     printf("The best-selling type of car is %s: %d\n", types[best_type_idx], highest_type_sales);
                 } else {
-                    printf("Invalid input\n");
+                    printf("Invalid Input\n");
                 }
                 break;
             }
             case print: {
+                // Part 2 printing layout requirement
                 for (int b = 0; b < NUM_OF_BRANDS; b++) {
                     printf("Sales for %s:\n", brands[b]);
                     for (int d = 0; d < DAYS_IN_YEAR; d++) {
@@ -162,14 +154,12 @@ int main() {
                 int overall_best_type = 0, max_type_sales = -1;
                 int overall_best_day = 0, max_day_sales = -1;
 
-                // Determine top selling brand overall
+                // Brand insights
                 for (int b = 0; b < NUM_OF_BRANDS; b++) {
                     int brand_total = 0;
                     for (int d = 0; d < DAYS_IN_YEAR; d++) {
                         for (int t = 0; t < NUM_OF_TYPES; t++) {
-                            if (cube[d][b][t] != -1) {
-                                brand_total += cube[d][b][t];
-                            }
+                            if (cube[d][b][t] != -1) brand_total += cube[d][b][t];
                         }
                     }
                     if (brand_total > max_brand_sales) {
@@ -178,14 +168,12 @@ int main() {
                     }
                 }
 
-                // Determine top selling vehicle type overall
+                // Type insights
                 for (int t = 0; t < NUM_OF_TYPES; t++) {
                     int type_total = 0;
                     for (int d = 0; d < DAYS_IN_YEAR; d++) {
                         for (int b = 0; b < NUM_OF_BRANDS; b++) {
-                            if (cube[d][b][t] != -1) {
-                                type_total += cube[d][b][t];
-                            }
+                            if (cube[d][b][t] != -1) type_total += cube[d][b][t];
                         }
                     }
                     if (type_total > max_type_sales) {
@@ -194,14 +182,12 @@ int main() {
                     }
                 }
 
-                // Determine the single highest sales day overall
+                // Day insights
                 for (int d = 0; d < DAYS_IN_YEAR; d++) {
                     int day_total = 0;
                     for (int b = 0; b < NUM_OF_BRANDS; b++) {
                         for (int t = 0; t < NUM_OF_TYPES; t++) {
-                            if (cube[d][b][t] != -1) {
-                                day_total += cube[d][b][t];
-                            }
+                            if (cube[d][b][t] != -1) day_total += cube[d][b][t];
                         }
                     }
                     if (day_total > max_day_sales) {
@@ -252,7 +238,9 @@ int main() {
                 break;
             }
             default:
-                printf("Invalid input\n");
+                printf("Invalid Input\n");
+                // Clear out keyboard buffer if bad input/letters are entered to protect against loops
+                while (getchar() != '\n');
         }
         printMenu();
         scanf("%d", &choice);
