@@ -40,7 +40,7 @@ int main() {
     int days[NUM_OF_BRANDS] = {0};
     int choice;
 
-    // Part 2: Initialize all positions inside the cube to -1
+    // Initialize all positions inside the cube to -1
     for (int d = 0; d < DAYS_IN_YEAR; d++) {
         for (int b = 0; b < NUM_OF_BRANDS; b++) {
             for (int t = 0; t < NUM_OF_TYPES; t++) {
@@ -73,14 +73,41 @@ int main() {
                 int day;
                 scanf("%d", &day);
                 
-                // Part 2 constraint: Strictly check day validity first
                 if (day >= 1 && day <= DAYS_IN_YEAR) {
-                    for (int b = 0; b < NUM_OF_BRANDS; b++) {
-                        scanf("%d %d %d %d", &cube[day - 1][b][0], 
-                                             &cube[day - 1][b][1], 
-                                             &cube[day - 1][b][2], 
-                                             &cube[day - 1][b][3]);
-                        days[b]++;
+                    // Track which brands have been populated for this specific day run
+                    // 0 = missing, 1 = filled
+                    int filled_brands[NUM_OF_BRANDS] = {0};
+                    int total_filled = 0;
+
+                    while (total_filled < NUM_OF_BRANDS) {
+                        // 1. Print missing brands explicitly matching your sample output format
+                        printf("No data for brands");
+                        for (int b = 0; b < NUM_OF_BRANDS; b++) {
+                            if (filled_brands[b] == 0) {
+                                printf(" %s", brands[b]);
+                            }
+                        }
+                        printf("\n");
+
+                        printf("Please complete the data\n");
+                        
+                        // 2. Read target brand to fill
+                        int target_brand;
+                        scanf("%d", &target_brand);
+
+                        // 3. Populate indices if valid and not already filled
+                        if (target_brand >= 0 && target_brand < NUM_OF_BRANDS && filled_brands[target_brand] == 0) {
+                            scanf("%d %d %d %d", &cube[day - 1][target_brand][0], 
+                                                 &cube[day - 1][target_brand][1], 
+                                                 &cube[day - 1][target_brand][2], 
+                                                 &cube[day - 1][target_brand][3]);
+                            
+                            filled_brands[target_brand] = 1;
+                            days[target_brand]++;
+                            total_filled++;
+                        } else {
+                            printf("Invalid Input\n");
+                        }
                     }
                 } else {
                     printf("Invalid Input\n");
@@ -98,7 +125,6 @@ int main() {
                     int highest_type_sales = -1;
                     int best_type_idx = 0;
 
-                    // Calculate total and top-performing brands
                     for (int b = 0; b < NUM_OF_BRANDS; b++) {
                         int brand_sum = 0;
                         for (int t = 0; t < NUM_OF_TYPES; t++) {
@@ -113,7 +139,6 @@ int main() {
                         }
                     }
 
-                    // Calculate top-performing types
                     for (int t = 0; t < NUM_OF_TYPES; t++) {
                         int type_sum = 0;
                         for (int b = 0; b < NUM_OF_BRANDS; b++) {
@@ -137,7 +162,6 @@ int main() {
                 break;
             }
             case print: {
-                // Part 2 printing layout requirement
                 for (int b = 0; b < NUM_OF_BRANDS; b++) {
                     printf("Sales for %s:\n", brands[b]);
                     for (int d = 0; d < DAYS_IN_YEAR; d++) {
@@ -154,7 +178,6 @@ int main() {
                 int overall_best_type = 0, max_type_sales = -1;
                 int overall_best_day = 0, max_day_sales = -1;
 
-                // Brand insights
                 for (int b = 0; b < NUM_OF_BRANDS; b++) {
                     int brand_total = 0;
                     for (int d = 0; d < DAYS_IN_YEAR; d++) {
@@ -168,7 +191,6 @@ int main() {
                     }
                 }
 
-                // Type insights
                 for (int t = 0; t < NUM_OF_TYPES; t++) {
                     int type_total = 0;
                     for (int d = 0; d < DAYS_IN_YEAR; d++) {
@@ -182,7 +204,6 @@ int main() {
                     }
                 }
 
-                // Day insights
                 for (int d = 0; d < DAYS_IN_YEAR; d++) {
                     int day_total = 0;
                     for (int b = 0; b < NUM_OF_BRANDS; b++) {
@@ -239,7 +260,6 @@ int main() {
             }
             default:
                 printf("Invalid Input\n");
-                // Clear out keyboard buffer if bad input/letters are entered to protect against loops
                 while (getchar() != '\n');
         }
         printMenu();
