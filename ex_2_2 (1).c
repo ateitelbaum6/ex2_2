@@ -77,7 +77,7 @@ int main() {
                 }    
                 break;
             }
-            case addAll:
+            case addAll: {
                 int day;
                 scanf("%d", &day);
                 
