@@ -56,14 +56,22 @@ int main() {
         switch(choice){
             case addOne: {
                 int day, brand;
-                scanf("%d %d", &day, &brand);
+                if (scanf("%d %d", &day, &brand) != 2) {
+                    printf("Invalid Input\n");
+                    while (getchar() != '\n');
+                    break;
+                }
                 
                 if (day >= 1 && day <= DAYS_IN_YEAR && brand >= 0 && brand < NUM_OF_BRANDS) {
-                    scanf("%d %d %d %d", &cube[day - 1][brand][0], 
-                                         &cube[day - 1][brand][1], 
-                                         &cube[day - 1][brand][2], 
-                                         &cube[day - 1][brand][3]);
-                    days[brand]++;
+                    if (scanf("%d %d %d %d", &cube[day - 1][brand][0], 
+                                             &cube[day - 1][brand][1], 
+                                             &cube[day - 1][brand][2], 
+                                             &cube[day - 1][brand][3]) != 4) {
+                        printf("Invalid Input\n");
+                        while (getchar() != '\n');
+                    } else {
+                        days[brand]++;
+                    }
                 } else {
                     printf("Invalid Input\n");
                 }
@@ -71,16 +79,17 @@ int main() {
             }
             case addAll: {
                 int day;
-                scanf("%d", &day);
+                if (scanf("%d", &day) != 1) {
+                    printf("Invalid Input\n");
+                    while (getchar() != '\n');
+                    break;
+                }
                 
                 if (day >= 1 && day <= DAYS_IN_YEAR) {
-                    // Track which brands have been populated for this specific day run
-                    // 0 = missing, 1 = filled
                     int filled_brands[NUM_OF_BRANDS] = {0};
                     int total_filled = 0;
 
                     while (total_filled < NUM_OF_BRANDS) {
-                        // 1. Print missing brands explicitly matching your sample output format
                         printf("No data for brands");
                         for (int b = 0; b < NUM_OF_BRANDS; b++) {
                             if (filled_brands[b] == 0) {
@@ -88,23 +97,27 @@ int main() {
                             }
                         }
                         printf("\n");
-
                         printf("Please complete the data\n");
                         
-                        // 2. Read target brand to fill
                         int target_brand;
-                        scanf("%d", &target_brand);
+                        if (scanf("%d", &target_brand) != 1) {
+                            printf("Invalid Input\n");
+                            while (getchar() != '\n');
+                            continue;
+                        }
 
-                        // 3. Populate indices if valid and not already filled
                         if (target_brand >= 0 && target_brand < NUM_OF_BRANDS && filled_brands[target_brand] == 0) {
-                            scanf("%d %d %d %d", &cube[day - 1][target_brand][0], 
-                                                 &cube[day - 1][target_brand][1], 
-                                                 &cube[day - 1][target_brand][2], 
-                                                 &cube[day - 1][target_brand][3]);
-                            
-                            filled_brands[target_brand] = 1;
-                            days[target_brand]++;
-                            total_filled++;
+                            if (scanf("%d %d %d %d", &cube[day - 1][target_brand][0], 
+                                                     &cube[day - 1][target_brand][1], 
+                                                     &cube[day - 1][target_brand][2], 
+                                                     &cube[day - 1][target_brand][3]) != 4) {
+                                printf("Invalid Input\n");
+                                while (getchar() != '\n');
+                            } else {
+                                filled_brands[target_brand] = 1;
+                                days[target_brand]++;
+                                total_filled++;
+                            }
                         } else {
                             printf("Invalid Input\n");
                         }
@@ -116,7 +129,11 @@ int main() {
             }
             case stats: {
                 int day;
-                scanf("%d", &day);
+                if (scanf("%d", &day) != 1) {
+                    printf("Invalid Input\n");
+                    while (getchar() != '\n');
+                    break;
+                }
 
                 if (day >= 1 && day <= DAYS_IN_YEAR) {
                     int total_sales = 0;
@@ -263,7 +280,10 @@ int main() {
                 while (getchar() != '\n');
         }
         printMenu();
-        scanf("%d", &choice);
+        if (scanf("%d", &choice) != 1) {
+            choice = -1; 
+            while (getchar() != '\n');
+        }
     }
     printf("Goodbye!\n");
     return 0;
